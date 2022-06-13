@@ -1,0 +1,17 @@
+pipeline {
+    agent {
+        docker {
+            image 'sw-production/ncs-ext'
+            label 'docker'
+        }
+    }
+    stages {
+        stage('webhooktest') {
+            steps {
+                script{
+                    sh "echo dont mind me"
+                }
+            }
+        }
+    }
+}
