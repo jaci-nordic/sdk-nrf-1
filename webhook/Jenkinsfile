@@ -9,7 +9,7 @@ pipeline {
         stage('webhooktest') {
             steps {
                 script{
-                    sh "echo dont mind me"
+                    sh "echo dont mind sdfme"
                 }
             }
         }
