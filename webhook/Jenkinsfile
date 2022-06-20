@@ -11,7 +11,7 @@ pipeline {
                 script{
                     sh "echo dont mind sdfme"
                 }
-                println "asdf"
+                println "test"
             }
         }
     }
