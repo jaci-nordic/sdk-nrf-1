@@ -68,18 +68,20 @@ jobs:
 
       - name: Commit and push changes
         if: ${{ steps.diff.outputs.difference == 'true' }}
+        working-directory: ncs/nrf   # Add this line
         run: |
           git config user.email "NordicBuilder@github.com"
           git config user.name "NordicBuilder"
-          git add ncs/requirements-fixed.txt
+          git add ../../requirements-fixed.txt  # Adjust path based on new working directory
           git commit -F- <<EOF
           Update requirements-fixed.txt from NordicBuilder
-          
+
           Automatically upload changed requirements-fixed.txt
 
           Signed-off-by: Nordic Builder <NordicBuilder@nordicsemi.no>
           EOF
           git push origin HEAD:${{ github.head_ref }}
+
 
       - name: Post summary
         if: ${{ !cancelled() }}
