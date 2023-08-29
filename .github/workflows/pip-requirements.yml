@@ -68,11 +68,13 @@ jobs:
 
       - name: Commit and push changes
         if: ${{ steps.diff.outputs.difference == 'true' }}
-        working-directory: ncs  # Adjusted working directory
+        working-directory: ../  # Moving one directory up to encompass ncs
         run: |
+          ls
+          pwd
           git config user.email "NordicBuilder@github.com"
           git config user.name "NordicBuilder"
-          git add requirements-fixed.txt  # Adjusted path based on new working directory
+          git add ncs/requirements-fixed.txt  # Referencing the file from the correct location
           git commit -F- <<EOF
           Update requirements-fixed.txt from NordicBuilder
 
