@@ -72,7 +72,7 @@ jobs:
         run: |
           git config user.email "NordicBuilder@github.com"
           git config user.name "NordicBuilder"
-          git add ../../requirements-fixed.txt
+          git add ncs/nrf/ncs/requirements-fixed.txt
           git commit -F- <<EOF
           Update requirements-fixed.txt from NordicBuilder
           
