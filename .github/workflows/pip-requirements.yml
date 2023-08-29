@@ -59,15 +59,15 @@ jobs:
           DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
           if [[ -n "$DIFF_OUTPUT" ]]; then
             echo "Differences found!"
-            echo "{difference}={true}" >> $GITHUB_OUTPUT
-
+            echo "{difference}=true" >> $GITHUB_OUTPUT
+            echo ${{ steps.diff.outputs.difference }}
           else
             echo "No differences found."
-            echo "{difference}={false}" >> $GITHUB_OUTPUT
+            echo "{difference}=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Commit and push changes
-        if: contains(steps.diff.outputs.difference, 'true') == true
+        if: ${{ steps.diff.outputs.difference }}
         run: |
           git config --local user.email "NordicBuilder@github.com"
           git config --local user.name "NordicBuilder"
