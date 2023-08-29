@@ -60,14 +60,14 @@ jobs:
           if [[ -n "$DIFF_OUTPUT" ]]; then
             echo "Differences found!"
             echo "{difference}=true" >> $GITHUB_OUTPUT
-            echo "${{ steps.diff.outputs.difference }}"
+            echo '${{ steps.diff.outputs.difference }}'
           else
             echo "No differences found."
             echo "{difference}=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Commit and push changes
-        if: steps.diff.outputs.difference
+        if: steps.diff.outputs.difference == true
         run: |
           git config --local user.email "NordicBuilder@github.com"
           git config --local user.name "NordicBuilder"
