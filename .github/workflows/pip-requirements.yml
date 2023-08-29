@@ -17,6 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/head
           path: ncs/nrf
           fetch-depth: 0
 
@@ -55,8 +56,29 @@ jobs:
         run: |
           NEW=ncs/requirements-fixed.txt
           OLD=ncs/nrf/scripts/requirements-fixed.txt
-          echo -e "$NEW\t\t\t\t\t"$OLD
           diff -y $NEW $OLD
+          if [ $? -ne 0 ]; then
+            echo "Differences found!"
+            echo "::set-output name=difference::true"
+          else
+            echo "No differences found."
+            echo "::set-output name=difference::false"
+          fi
+
+      - name: Commit and push changes
+        if: steps.diff.outputs.difference == 'true'
+        run: |
+          git config --local user.email "NordicBuilder@github.com"
+          git config --local user.name "NordicBuilder"
+          git add ncs/requirements-fixed.txt
+          git commit -F- <<EOF
+          Update requirements-fixed.txt from NordicBuilder
+          
+          Automatically upload changed requirements-fixed.txt
+
+          Signed-off-by: Nordic Builder <NordicBuilder@nordicsemi.no>
+          EOF
+          git push origin HEAD:${{ github.head_ref }}
 
       - name: Post summary
         if: ${{ !cancelled() }}
