@@ -56,8 +56,8 @@ jobs:
         run: |
           NEW=ncs/requirements-fixed.txt
           OLD=ncs/nrf/scripts/requirements-fixed.txt
-          diff -y $NEW $OLD
-          if [ $? -ne 0 ]; then
+          DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
+          if [[ -n "$DIFF_OUTPUT" ]]; then
             echo "Differences found!"
             echo "::set-output name=difference::true"
           else
