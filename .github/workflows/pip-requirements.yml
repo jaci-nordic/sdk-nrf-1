@@ -59,11 +59,11 @@ jobs:
           DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
           if [[ -n "$DIFF_OUTPUT" ]]; then
             echo "Differences found!"
-            run: echo "{difference}={true}" >> $GITHUB_OUTPUT
+            echo "{difference}={true}" >> $GITHUB_OUTPUT
 
           else
             echo "No differences found."
-            run: echo "{difference}={false}" >> $GITHUB_OUTPUT
+            echo "{difference}={false}" >> $GITHUB_OUTPUT
           fi
 
       - name: Commit and push changes
