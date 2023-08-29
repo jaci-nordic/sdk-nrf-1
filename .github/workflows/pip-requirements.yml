@@ -67,7 +67,7 @@ jobs:
           fi
 
       - name: Commit and push changes
-        if: steps.diff.outputs.difference == true
+        if: ${{ steps.diff.outputs.difference == 'true' }}
         run: |
           git config --local user.email "NordicBuilder@github.com"
           git config --local user.name "NordicBuilder"
