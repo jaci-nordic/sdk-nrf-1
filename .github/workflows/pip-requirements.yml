@@ -68,7 +68,6 @@ jobs:
 
       - name: Commit and push changes
         if: ${{ steps.diff.outputs.difference == 'true' }}
-        working-directory: ncs/nrf
         run: |
           git config user.email "NordicBuilder@github.com"
           git config user.name "NordicBuilder"
