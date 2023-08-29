@@ -51,20 +51,21 @@ jobs:
           name: requirements-fixed
           path: ncs/requirements-fixed.txt
 
-      - name: Compare requirements-fixed
-        id: diff
+      - name: Commit and push changes
+        if: ${{ steps.diff.outputs.difference == 'true' }}
+        working-directory: sdk-nrf-1  # Move into the git repository directory
         run: |
-          NEW=ncs/requirements-fixed.txt
-          OLD=ncs/nrf/scripts/requirements-fixed.txt
-          DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
-          if [[ -n "$DIFF_OUTPUT" ]]; then
-            echo "Differences found!"
-            echo "difference=true" >> $GITHUB_OUTPUT
-            echo '${{ steps.diff.outputs.difference }}'
-          else
-            echo "No differences found."
-            echo "difference=false" >> $GITHUB_OUTPUT
-          fi
+          git config user.email "NordicBuilder@github.com"
+          git config user.name "NordicBuilder"
+          git add ncs/requirements-fixed.txt  # Path adjusted based on the new working directory
+          git commit -F- <<EOF
+          Update requirements-fixed.txt from NordicBuilder
+
+          Automatically upload changed requirements-fixed.txt
+
+          Signed-off-by: Nordic Builder <NordicBuilder@nordicsemi.no>
+          EOF
+          git push origin HEAD:${{ github.head_ref }}
 
       - name: Commit and push changes
         if: ${{ steps.diff.outputs.difference == 'true' }}
@@ -74,7 +75,7 @@ jobs:
           pwd
           git config user.email "NordicBuilder@github.com"
           git config user.name "NordicBuilder"
-          git add requirements-fixed.txt  # Referencing the file from the correct location
+          git add sdk-nrf1/requirements-fixed.txt  # Referencing the file from the correct location
           git commit -F- <<EOF
           Update requirements-fixed.txt from NordicBuilder
 
