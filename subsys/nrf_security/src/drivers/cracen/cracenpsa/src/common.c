@@ -84,6 +84,7 @@ psa_status_t silex_statuscodes_to_psa(int ret)
 		return PSA_ERROR_INSUFFICIENT_MEMORY;
 
 	case SX_ERR_INSUFFICIENT_ENTROPY:
+	case SX_ERR_TOO_MANY_ATTEMPTS:
 		return PSA_ERROR_INSUFFICIENT_ENTROPY;
 
 	case SX_ERR_INVALID_CIPHERTEXT:
@@ -556,6 +557,10 @@ int cracen_signature_get_rsa_key(struct si_rsa_key *rsa, bool extract_pubkey, bo
 		return ret;
 	}
 
+	if (PSA_BYTES_TO_BITS(modulus->sz) > PSA_MAX_KEY_BITS) {
+		return PSA_ERROR_NOT_SUPPORTED;
+	}
+
 	/* Import E */
 	ret = cracen_signature_asn1_get_operand(&p, end, exponent);
 	if (ret) {
@@ -575,7 +580,7 @@ int cracen_signature_get_rsa_key(struct si_rsa_key *rsa, bool extract_pubkey, bo
 	return SX_OK;
 }
 
-static int cracen_prepare_ik_key(const uint8_t *user_data)
+int cracen_prepare_ik_key(const uint8_t *user_data)
 {
 #ifdef CONFIG_CRACEN_LOAD_KMU_SEED
 	if (!nrf_cracen_seedram_lock_check(NRF_CRACEN)) {
