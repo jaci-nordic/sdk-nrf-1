@@ -18,11 +18,11 @@ jobs:
           path: workspace/nrf
           west-update-args: '--group-filter=+babblesim'
 
-      - name: Configure git and run garbage collection
-        run: |
-          cd workspace/nrf
-          git config --global pack.windowMemory "32m"
-          west forall -c 'git gc --prune --aggressive'
+      # - name: Configure git and run garbage collection
+      #   run: |
+      #     cd workspace/nrf
+      #     git config --global pack.windowMemory "32m"
+      #     west forall -c 'git gc --prune --aggressive'
 
       - name: Create tar archive
         run: |
