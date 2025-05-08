@@ -2,8 +2,8 @@ name: src-mirror
 
 on:
   push:
-    tags:
-      - '*'
+    # tags:
+    #   - '*'
 
 jobs:
   zip-and-upload:
