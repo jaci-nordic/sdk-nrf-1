@@ -31,7 +31,7 @@ jobs:
           tar -C workspace -czvf "${REPO_NAME}-${TAG}.tar.gz" .
 
       - name: Set up JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v4
+        uuses: jfrog/setup-jfrog-cli@f748a0599171a192a2668afee8d0497f7c1069df
 
       - name: Configure and Upload to Artifactory
         env:
