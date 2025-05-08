@@ -14,9 +14,11 @@ jobs:
         uses: nrfconnect/action-checkout-west-update@main
         with:
           git-ref: ${{ github.ref_name }}
-          git-fetch-depth: 0
+          # git-fetch-depth: 0 changed for tests
+          git-fetch-depth: 1
           path: workspace/nrf
-          west-update-args: '--group-filter=+babblesim'
+          # west-update-args: '--group-filter=+babblesim'  changed for tests
+          west-update-args: '--narrow --group-filter=+babblesim -o=--depth=1'
 
       # - name: Configure git and run garbage collection
       #   run: |
@@ -38,7 +40,7 @@ jobs:
           ARTIFACTORY_URL: https://eu.files.nordicsemi.com/artifactory
           REPOSITORY: ncs-src-mirror-test
           FILE_PATH: ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz
-          TARGET_PATH: ${{ github.ref_name }}/
+          TARGET_PATH: ${{ github.event.repository.name }}
           ARTIFACTORY_USER: ${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
           ARTIFACTORY_PASS: ${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }}
         run: |
