@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Sync source to Artifactory
-          uses: nrfconnect/action-synchronize-src@development
+          uses: nrfconnect/action-src-mirror@development
           with:
             git-ref: ${{ github.ref_name }}
             git-fetch-depth: '1'
