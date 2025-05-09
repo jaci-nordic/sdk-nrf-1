@@ -9,14 +9,14 @@ jobs:
 
     steps:
       - name: Sync source to Artifactory
-          uses: nrfconnect/action-src-mirror@development
-          with:
-            git-ref: ${{ github.ref_name }}
-            git-fetch-depth: '1'
-            path: 'workspace/nrf'
-            west-update-args: '--narrow --group-filter=+babblesim -o=--depth=1'
-            artifactory-url: 'https://eu.files.nordicsemi.com/artifactory'
-            artifactory-repository: 'ncs-src-mirror'
-            artifactory-target-prefix: 'external'
-            artifactory-user: ${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
-            artifactory-pass: ${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }}
+        uses: nrfconnect/action-src-mirror@development
+        with:
+          git-ref: ${{ github.ref_name }}
+          git-fetch-depth: '1'
+          path: 'workspace/nrf'
+          west-update-args: '--narrow --group-filter=+babblesim -o=--depth=1'
+          artifactory-url: 'https://eu.files.nordicsemi.com/artifactory'
+          artifactory-repository: 'ncs-src-mirror'
+          artifactory-target-prefix: 'external'
+          artifactory-user: ${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
+          artifactory-pass: ${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }}
