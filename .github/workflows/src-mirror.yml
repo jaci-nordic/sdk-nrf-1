@@ -19,7 +19,7 @@ jobs:
           path: workspace/nrf
           # west-update-args: '--group-filter=+babblesim'  changed for tests
           west-update-args: '--narrow --group-filter=+babblesim -o=--depth=1'
-
+  # removed for tests
       # - name: Configure git and run garbage collection
       #   run: |
       #     cd workspace/nrf
@@ -38,9 +38,9 @@ jobs:
       - name: Configure and Upload to Artifactory
         env:
           ARTIFACTORY_URL: https://eu.files.nordicsemi.com/artifactory
-          REPOSITORY: ncs-src-mirror-test
+          REPOSITORY: ncs-src-mirror
           FILE_PATH: ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz
-          TARGET_PATH: ${{ github.event.repository.name }}
+          TARGET_PATH: test/${{ github.event.repository.name }} #set proper folder after tests
           ARTIFACTORY_USER: ${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
           ARTIFACTORY_PASS: ${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }}
         run: |
