@@ -2,51 +2,21 @@ name: src-mirror
 
 on:
   push:
-    # tags:
-    #   - '*'
 
 jobs:
   zip-and-upload:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Checkout sources
-        uses: nrfconnect/action-checkout-west-update@main
-        with:
-          git-ref: ${{ github.ref_name }}
-          # git-fetch-depth: 0 changed for tests
-          git-fetch-depth: 1
-          path: workspace/nrf
-          # west-update-args: '--group-filter=+babblesim'  changed for tests
-          west-update-args: '--narrow --group-filter=+babblesim -o=--depth=1'
-  # removed for tests
-      # - name: Configure git and run garbage collection
-      #   run: |
-      #     cd workspace/nrf
-      #     git config --global pack.windowMemory "32m"
-      #     west forall -c 'git gc --prune --aggressive'
-
-      - name: Create tar archive
-        run: |
-          REPO_NAME="${GITHUB_REPOSITORY##*/}"
-          TAG="${GITHUB_REF_NAME}"
-          tar -C workspace -czvf "${REPO_NAME}-${TAG}.tar.gz" .
-
-      - name: Set up JFrog CLI
-        uses: jfrog/setup-jfrog-cli@f748a0599171a192a2668afee8d0497f7c1069df
-
-      - name: Configure and Upload to Artifactory
-        env:
-          ARTIFACTORY_URL: https://eu.files.nordicsemi.com/artifactory
-          REPOSITORY: ncs-src-mirror
-          FILE_PATH: ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz
-          TARGET_PATH: test/${{ github.event.repository.name }} #set proper folder after tests
-          ARTIFACTORY_USER: ${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
-          ARTIFACTORY_PASS: ${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }}
-        run: |
-          jfrog rt u \
-            "$FILE_PATH" \
-            "$REPOSITORY/$TARGET_PATH" \
-            --url="$ARTIFACTORY_URL" \
-            --user="$ARTIFACTORY_USER" \
-            --password="$ARTIFACTORY_PASS"
+      - name: Sync source to Artifactory
+          uses: nrfconnect/action-synchronize-src@development
+          with:
+            git-ref: ${{ github.ref_name }}
+            git-fetch-depth: '1'
+            path: 'workspace/nrf'
+            west-update-args: '--narrow --group-filter=+babblesim -o=--depth=1'
+            artifactory-url: 'https://eu.files.nordicsemi.com/artifactory'
+            artifactory-repository: 'ncs-src-mirror'
+            artifactory-target-prefix: 'external'
+            artifactory-user: ${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
+            artifactory-pass: ${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }}
